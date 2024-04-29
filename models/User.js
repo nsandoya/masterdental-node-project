@@ -20,6 +20,6 @@ const userSchema =  new mongoose.Schema({
     },
 });
 // User model
-const User = mongoose.model("User", userSchema)
+//                    Collección (Mongo) | Schema
+module.exports= mongoose.model("usuarios", userSchema)
 
-module.exports = User
