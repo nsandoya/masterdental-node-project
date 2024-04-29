@@ -12,7 +12,7 @@ app.use(express.json())
 // Rutas:   base     + endpoints
 //app.use('/api/users', userRoutes)
 
-// Inicializar la ddbb
+// Conectar con la ddbb
 connectDB()
 
 // Inicializar el servidor
