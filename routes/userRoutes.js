@@ -7,10 +7,10 @@ const router = express.Router();
 const UserController = require('../controllers/userController')
 
 // Rutas :D
-router.get('/', UserController.getAllUsers);
-router.get('/:id', UserController.getUserByID);
-router.post('/', UserController.createUser);
-router.put('/:id', UserController.updateUser);
-router.delete('/:id', UserController.deleteUser);
+router.get('/', UserController.getAllUsers); // Obtener todos los registros
+router.get('/:id', UserController.getUserByID); // Obtener registro por ID
+router.post('/', UserController.createUser); // Crear nuevo registro
+router.put('/:id', UserController.updateUser); // Actualizar registro
+router.delete('/:id', UserController.deleteUser); // Borrar registro
 
 module.exports = router 
