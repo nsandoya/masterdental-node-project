@@ -10,6 +10,16 @@ function getAllUsers(req, res){
         res.status(500).send("Error al tratar de obtener todos los registros")
     })
 }
+function getUserByID(req, res){
+    const userId = req.params.id;
+
+    User.findById(userId)
+    .then(user => res.status(200).json(user))
+    .catch(err => {
+        console.error(err);
+        res.status(500).send("Error al tratar de obtener el registro")
+    })
+}
 
 // POST (crear nuevos registros)
 function createUser(req, res){
@@ -20,7 +30,7 @@ function createUser(req, res){
     User.create({
         nombre, edad, email, pssword
     }).
-    then((newUser) => res.status(200).send(newUser.body))
+    then((newUser) => res.status(200).json(newUser))
     .catch(err => {
         console.error(err);
         res.status(500).send("Error al tratar de crear un nuevo registro")
@@ -35,7 +45,7 @@ function updateUser(req, res){
     const newUserInfo = req.body;
                     // id de registro | datos para el update | Este parámetro indica que esta operación debe retornar el registro actualizado
     User.findByIdAndUpdate(userId,newUserInfo, {new: true}) 
-    .then(user => res.status(200).send(user.body))
+    .then(user => res.status(200).json(user))
     .catch(err => {
         console.error(err);
         res.status(500).send("Error al tratar de crear un nuevo registro")
@@ -56,6 +66,7 @@ function deleteUser(req, res){
 
 module.exports = {
     getAllUsers,
+    getUserByID,
     createUser,
     updateUser,
     deleteUser
