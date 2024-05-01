@@ -4,16 +4,18 @@ const User = require('../models/user');
 function getCurrentUser(req, res){
     new Promise((resolve, reject)=>{
         const userId = req.userId;
-        
         // Buscar el usuario usando el id proporcionado
-        User.findById(userId)
-        .then( user => {
+        User.findById({_id: userId})
+        .then((user) => {
             if(!user){
                 reject({
                     status: 404,
                     message: "El usuario no existe"
                 })
-            }else{resolve(user)}
+            }else{
+                //resolve(user)
+                return(user)
+            }
         })
         .catch(error => reject({
             status: 500,
@@ -21,11 +23,11 @@ function getCurrentUser(req, res){
         }
         ))
     })
-    .then(user => res.json(user))
+    .then(user => res.status(200).json(user))
     .catch(error => {
         console.log(error)
         res.status(error.status || 500).send({message: error.message})
     })
 }
 
-module.exports = {getCurrentUser}
+module.exports = getCurrentUser
