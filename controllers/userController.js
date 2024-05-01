@@ -7,7 +7,7 @@ function getAllUsers(req, res){
     .then(users => res.status(200).json(users))
     .catch(err => {
         console.error(err);
-        res.status(500).send("Error al tratar de obtener todos los registros")
+        res.status(404).send({status: 404, message:"Tu registro está vacío"})
     })
 }
 function getUserByID(req, res){
@@ -17,7 +17,7 @@ function getUserByID(req, res){
     .then(user => res.status(200).json(user))
     .catch(err => {
         console.error(err);
-        res.status(500).send("Error al tratar de obtener el registro")
+        res.status(404).send({status: 404, message:"El usuario que buscas no existe"})
     })
 }
 
@@ -33,7 +33,7 @@ function createUser(req, res){
     then((newUser) => res.status(200).json(newUser))
     .catch(err => {
         console.error(err);
-        res.status(500).send("Error al tratar de crear un nuevo registro")
+        res.status(500).send({status: 500, message:"Error al tratar de crear el nuevo registro"})
     })
 }
 
@@ -48,7 +48,7 @@ function updateUser(req, res){
     .then(user => res.status(200).json(user))
     .catch(err => {
         console.error(err);
-        res.status(500).send("Error al tratar de crear un nuevo registro")
+        res.status(500).send({status: 500, message:"Error al tratar de actualizar el registro"})
     })
     
 }   
@@ -60,7 +60,7 @@ function deleteUser(req, res){
     .then(user => res.status(204).send(`El usuario ${userID} fue eliminado`))
     .catch(err => {
         console.error(err);
-        res.status(500).send("Error al tratar de eliminar el registro")
+        res.status(500).send({status: 500, message:"Error al tratar de eliminar el registro"})
     })
 }
 
