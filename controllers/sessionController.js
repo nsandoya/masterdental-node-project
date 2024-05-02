@@ -13,8 +13,9 @@ function getCurrentUser(req, res){
                     message: "El usuario no existe"
                 })
             }else{
+                res.status(200).json(user); // Simplemente así, para evitar que se envíen 2 respuestas a la vez (ganando la respuesta de error, provocando que no se pueda setear el header del response al cliente)
                 //resolve(user)
-                return(user)
+                //return(user)
             }
         })
         .catch(error => reject({

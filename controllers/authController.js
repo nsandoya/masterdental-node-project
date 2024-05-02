@@ -8,6 +8,7 @@ function login(req, res){
     .then(user => {
         if(!user){
             return res.status(401).send({
+                status: 401,
                 message: "Mail o contraseña inválidos"
             })
         }
@@ -15,24 +16,26 @@ function login(req, res){
         const match = (pssword === user.pssword)
         if(!match){
             return res.status(401).send({
+                status: 401,
                 message: "Inicio de sesión fallido"
             })
         }
-        // Se genera la public key
+        // Se genera el token de usuario
         const token = authService.generateToken(user);
         res.json({token})
     })
     .catch(err => {
         console.error(err)
         return res.status(401).send({
+            status: 401,
             message: "Mail o contraseña inválidos"
         })
     })
 }
 
-// Cerrar sesión
-function logout(){
-    localStorage.removeItem("token")
+// Cerrar sesión (pendiente)
+function logout(req, res){
+    //localStorage.removeItem("token")
     res.status(200).send({
         message: "Has cerrado sesión"
     })
