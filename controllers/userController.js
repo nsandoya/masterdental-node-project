@@ -47,20 +47,22 @@ let updateUser = async(req, res) => {
     const userId = req.params.id;
     var newUserInfo = req.body;
                     // ID de registro | Datos para el update | Este parámetro indica que esta operación debe retornar el registro actualizado
-    
-    let newUserInfo2 = await bcryptService.hashPassword(newUserInfo.pssword)
-    .then(hashedPassword => {
-        //console.log(hashedPassword)
-        newUserInfo.pssword = hashedPassword;
-        //console.log("funciona?", newUserInfo.pssword);
-        return(newUserInfo)
-    })
-    .catch( (error) => {
-        console.error(error)
-        return(error)
-    })
+    if(newUserInfo.pssword){
+        var newUserInfo = await bcryptService.hashPassword(newUserInfo.pssword)
+        .then(hashedPassword => {
+            //console.log(hashedPassword)
+            newUserInfo.pssword = hashedPassword;
+            //console.log("funciona?", newUserInfo.pssword);
+            return(newUserInfo)
+        })
+        .catch( (error) => {
+            console.error(error)
+            return(error)
+        })
+        
+    }
 
-    User.findByIdAndUpdate(userId, newUserInfo2, {new:true})
+    User.findByIdAndUpdate(userId, newUserInfo, {new:true})
     .then((user) => {
         //console.log("dentro del update: psswrd", newUserInfo2, "userid", userId)
         res.status(200).json(user)
