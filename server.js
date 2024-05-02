@@ -3,6 +3,8 @@ const connectDB  = require('./ddbb/ddbb');
 const userRoutes = require("./routes/userRoutes");
 const authRoutes = require('./routes/authRoutes')
 const sessionRoutes = require('./routes/sessionRoutes')
+
+const verifyToken = require('./middlewares/verifyToken')
 // Crear instancia de Express
 const app = express();
 const PORT = 3000;
@@ -12,7 +14,7 @@ const PORT = 3000;
 app.use(express.json())
 
 // Rutas:   base     + endpoints
-app.use('/api/users', userRoutes) // No olvidar exportar las rutas desde userRoutes, authRoutes y sessionRoutes :v
+app.use('/api/users', verifyToken,userRoutes) // No olvidar exportar las rutas desde userRoutes, authRoutes y sessionRoutes :v
 app.use('/api/auth', authRoutes)
 app.use('/api/session', sessionRoutes)
 
