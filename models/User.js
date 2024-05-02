@@ -21,7 +21,7 @@ const userSchema =  new mongoose.Schema({
     },
 });
 
-// .pre es un preSaveMiddleware de Mongoose
+// .pre es un preSaveMiddleware de Mongo
 // Dentro de él podremos implementar el servicio de bcrypt antes creado para hashear el pssword antes de guardar el nuevo usuario :D
 userSchema.pre("save", function(next){
     if(!this.isModified("pssword")){
@@ -34,6 +34,7 @@ userSchema.pre("save", function(next){
     })
     .catch( (error) => {
         console.error(error)
+        next(error)
     })
 })
 

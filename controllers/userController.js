@@ -16,7 +16,7 @@ function getUserByID(req, res){
     const userId = req.params.id;
 
     User.findById(userId)
-    .then(user => res.status(200).json(user))
+    .then(user => res.status(200).send({usuario:user}))
     .catch(err => {
         console.error(err);
         res.status(404).send({status: 404, message:"El usuario que buscas no existe"})
