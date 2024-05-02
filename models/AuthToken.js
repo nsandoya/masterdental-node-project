@@ -1,11 +1,21 @@
 const mongoose = require('mongoose');
+const User = require('./user');
+
 
 const authTokenSchema = new mongoose.Schema({
     userId: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId, 
         ref: "User", // Si hay problemas al implementarlo, cambiarle a minúscula, o cambiarle a "usuarios"
         required: true
     },
+    nombre: {
+        type: String
+    },
+    /* nombre: {
+        type: String,
+        ref: "User", // Si hay problemas al implementarlo, cambiarle a minúscula, o cambiarle a "usuarios"
+        //required: true
+    }, */
     token: {
         type: String,
         required: true
@@ -17,6 +27,20 @@ const authTokenSchema = new mongoose.Schema({
     }
 });
 
-const AuthToken = mongoose.model("authtoken", authTokenSchema)
+/* authTokenSchema.pre("save", function(next){
+    if(!this.isModified("name")){
+        return next()
+    }
 
-module.exports = AuthToken
+    User.findById(this.userId)
+    .then( (user) => {
+        this.nombre = user.nombre
+        next()
+    })
+    .catch( (error) => {
+        console.error(error)
+        next(error)
+    })
+}) */
+
+module.exports = mongoose.model("authtoken", authTokenSchema)
