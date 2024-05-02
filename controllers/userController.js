@@ -47,8 +47,10 @@ let updateUser = async(req, res) => {
     const userId = req.params.id;
     var newUserInfo = req.body;
                     // ID de registro | Datos para el update | Este parámetro indica que esta operación debe retornar el registro actualizado
+    // Si queremos actualizar el pssword, se ejecuta el hasheado de la nueva contraseña antes de actualizar ese campo. 
+    // Se planteó todo el update como asíncrono porque esta operación requiere un tiempo para ejecutarse (y porque findByIdAndUpdate bypassea los middleware). Si no lo hacemos así, se guardará primero la nueva contraseña (tal cual la ingresó el cliente), y luego obtendremos el hash (muy tarde)
     if(newUserInfo.pssword){
-        var newUserInfo = await bcryptService.hashPassword(newUserInfo.pssword)
+        newUserInfo = await bcryptService.hashPassword(newUserInfo.pssword)
         .then(hashedPassword => {
             //console.log(hashedPassword)
             newUserInfo.pssword = hashedPassword;
@@ -57,7 +59,7 @@ let updateUser = async(req, res) => {
         })
         .catch( (error) => {
             console.error(error)
-            return(error)
+            return(newUserInfo)
         })
         
     }

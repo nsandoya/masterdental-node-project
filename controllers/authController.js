@@ -38,9 +38,9 @@ function login(req, res){
             res.json({token})
 
             // Una vez generado el user token, se guarda en la bbdd
-            AuthToken.create({userId: user._id, token, nombre: user.nombre})
+            AuthToken.create({userId: user._id, token, user: user.nombre})
             .then(() => {
-                console.log("User token guardado")
+                console.log("User token guardado", user.nombre)
                 //res.send({token})
             })
             .catch((error) => {
