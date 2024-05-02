@@ -38,6 +38,65 @@ userSchema.pre("save", function(next){
     })
 })
 
+// No funciona :c
+/* userSchema.pre("findByIdAndUpdate",function(next) {
+    console.log(this._update.pssword);
+    if (!this._update.pssword) {
+        return next();
+    }
+
+    bcryptService.hashPassword(this._update.pssword)
+    .then(hashedPassword => {
+        console.log(hashedPassword)
+        this._update.pssword = hashedPassword;
+        next()
+    })
+    .catch( (error) => {
+        console.error(error)
+        next(error)
+    })
+    
+  }); */
+
+    
+    /* const update = this.getUpdate();
+        if (!update.$set || !update.$set.pssword) {
+            console.log("no encontró nada")
+            return next();
+        }
+        try {
+            const hashedPassword = bcryptService.hashPassword(update.$set.pssword);
+            this.getUpdate().$set.pssword = hashedPassword;
+            next();
+        } catch (error) {
+            next(error);
+        } */
+        
+
+    /* var newPssword = this.getUpdate().pssword; 
+    console.log("Update: ", newPssword)
+    if (!newPssword) {
+        return next();
+    }
+
+    bcryptService.hashPassword(newPssword)
+    .then(hashedPassword => {
+        this.updateOne({pssword:hashedPassword},  
+        { $set: { pssword:hashedPassword } })
+        next()
+    })
+    .catch( (error) => {
+        console.error(error)
+        next(error)
+    })  */
+    /* try {
+        const hashedPassword = bcryptService.hashPassword(password);
+        this.getUpdate().$set.pssword = hashedPassword;
+        next();
+    } catch (error) {
+        next(error);
+    }*/
+
 
 // User model
 //                    Collección (Mongo) | Schema

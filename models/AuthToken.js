@@ -11,11 +11,6 @@ const authTokenSchema = new mongoose.Schema({
     nombre: {
         type: String
     },
-    /* nombre: {
-        type: String,
-        ref: "User", // Si hay problemas al implementarlo, cambiarle a minúscula, o cambiarle a "usuarios"
-        //required: true
-    }, */
     token: {
         type: String,
         required: true

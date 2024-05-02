@@ -7,6 +7,7 @@ function hashPassword(originalPassword){
             // Pssword original | # de pases de crypt| nueva contraseña
         bcrypt.hash(originalPassword, saltrounds, (error, hashedPassword) => {
             if(error){
+                console.log("El error es...",error)
                 PromiseRejectionEvent(new Error("El hasheo de contraseña ha fracasado"))
             }else{
                 resolve(hashedPassword)
