@@ -1,5 +1,6 @@
 // Importar model
 const User = require('../models/user');
+const bcryptService = require('../services/bcryptService')
 
 // GET (todos los registros)
 function getAllUsers(req, res){
@@ -10,6 +11,7 @@ function getAllUsers(req, res){
         res.status(404).send({status: 404, message:"Tu registro está vacío"})
     })
 }
+// GET (un registro en particular)
 function getUserByID(req, res){
     const userId = req.params.id;
 
@@ -25,7 +27,6 @@ function getUserByID(req, res){
 function createUser(req, res){
     // Destructuring de los campos incluidos en req.body (dichos datos se guardan en las constantes aquí creadas, respectivamente)
     const {nombre, edad, email, pssword} = req.body;
-    console.log(req.body)
     // Se recomienda hacerlo de esta forma solo si los campos y las constantes son homónimos
     User.create({
         nombre, edad, email, pssword
@@ -35,6 +36,9 @@ function createUser(req, res){
         console.error(err);
         res.status(500).send({status: 500, message:"Error al tratar de crear el nuevo registro"})
     })
+
+    console.log(req.body)
+
 }
 
 // PUT: modificar registros
@@ -43,7 +47,7 @@ function updateUser(req, res){
     const userId = req.params.id;
 
     const newUserInfo = req.body;
-                    // id de registro | datos para el update | Este parámetro indica que esta operación debe retornar el registro actualizado
+                    // ID de registro | Datos para el update | Este parámetro indica que esta operación debe retornar el registro actualizado
     User.findByIdAndUpdate(userId,newUserInfo, {new: true}) 
     .then(user => res.status(200).json(user))
     .catch(err => {

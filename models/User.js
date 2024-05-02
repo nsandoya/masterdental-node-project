@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bcryptService = require('../services/bcryptService')
 // Crear schema de usuario a través del constructor de mongoose
 const userSchema =  new mongoose.Schema({
     nombre: {
@@ -19,6 +20,24 @@ const userSchema =  new mongoose.Schema({
         required: true,
     },
 });
+
+// .pre es un preSaveMiddleware de Mongoose
+// Dentro de él podremos implementar el servicio de bcrypt antes creado para hashear el pssword antes de guardar el nuevo usuario :D
+userSchema.pre("save", function(next){
+    if(!this.isModified("pssword")){
+        return next()
+    }
+    bcryptService.hashPassword(this.pssword)
+    .then(hashedPassword => {
+        this.pssword = hashedPassword;
+        next()
+    })
+    .catch( (error) => {
+        console.error(error)
+    })
+})
+
+
 // User model
 //                    Collección (Mongo) | Schema
 module.exports= mongoose.model("usuarios", userSchema)
