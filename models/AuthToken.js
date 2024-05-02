@@ -8,7 +8,7 @@ const authTokenSchema = new mongoose.Schema({
         ref: "User", // Si hay problemas al implementarlo, cambiarle a minúscula, o cambiarle a "usuarios"
         required: true
     },
-    nombre: {
+    user: {
         type: String
     },
     token: {
@@ -22,20 +22,6 @@ const authTokenSchema = new mongoose.Schema({
     }
 });
 
-/* authTokenSchema.pre("save", function(next){
-    if(!this.isModified("name")){
-        return next()
-    }
 
-    User.findById(this.userId)
-    .then( (user) => {
-        this.nombre = user.nombre
-        next()
-    })
-    .catch( (error) => {
-        console.error(error)
-        next(error)
-    })
-}) */
 
 module.exports = mongoose.model("authtoken", authTokenSchema)

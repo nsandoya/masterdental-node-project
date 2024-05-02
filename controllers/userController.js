@@ -42,18 +42,39 @@ function createUser(req, res){
 }
 
 // PUT: modificar registros
-function updateUser(req, res){
+let updateUser = async(req, res) => {
     // Obtener de los parámetros de ruta (del request) el id de usuario, y usarlo para realizar la operación
     const userId = req.params.id;
-
-    const newUserInfo = req.body;
+    var newUserInfo = req.body;
                     // ID de registro | Datos para el update | Este parámetro indica que esta operación debe retornar el registro actualizado
-    User.findByIdAndUpdate(userId,newUserInfo, {new: true}) 
-    .then(user => res.status(200).json(user))
+    
+    let newUserInfo2 = await bcryptService.hashPassword(newUserInfo.pssword)
+    .then(hashedPassword => {
+        //console.log(hashedPassword)
+        newUserInfo.pssword = hashedPassword;
+        //console.log("funciona?", newUserInfo.pssword);
+        return(newUserInfo)
+    })
+    .catch( (error) => {
+        console.error(error)
+        return(error)
+    })
+
+    User.findByIdAndUpdate(userId, newUserInfo2, {new:true})
+    .then((user) => {
+        //console.log("dentro del update: psswrd", newUserInfo2, "userid", userId)
+        res.status(200).json(user)
+    })
     .catch(err => {
         console.error(err);
         res.status(500).send({status: 500, message:"Error al tratar de actualizar el registro"})
-    })
+    }) 
+    /* User.findByIdAndUpdate(userId,newUserInfo, {new: true} ) 
+    .then((user) => res.status(200).json(user))
+    .catch(err => {
+        console.error(err);
+        res.status(500).send({status: 500, message:"Error al tratar de actualizar el registro"})
+    }) */
     
 }   
 

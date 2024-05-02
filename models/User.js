@@ -38,9 +38,10 @@ userSchema.pre("save", function(next){
     })
 })
 
+
 // No funciona :c
-/* userSchema.pre("findByIdAndUpdate",function(next) {
-    console.log(this._update.pssword);
+/* userSchema.pre("findOneAndUpdate",function(next) {
+    console.log("middleware?");
     if (!this._update.pssword) {
         return next();
     }
