@@ -16,7 +16,23 @@ app.use(express.json())
 // Rutas:   base     + endpoints
 app.use('/api/users', verifyToken,userRoutes) // No olvidar exportar las rutas desde userRoutes, authRoutes y sessionRoutes :v
 app.use('/api/auth', authRoutes)
-app.use('/api/session', sessionRoutes)
+app.use('/api/session', verifyToken,sessionRoutes)
+
+// Errores de json (middleware global)
+app.use((err, req, res, next) => {
+    if(err instanceof SyntaxError && err.status === 400 && 'body' in err){
+        return res.status(400).send({
+            status: 400,
+            message: err.message,
+        })
+    }/* else if(!req.route) {
+        return res.status(404).send({
+            status: 404,
+            message: 'La ruta solicitada no existe',
+        })
+    } */
+    next()
+})
 
 // Conectar con la ddbb
 connectDB()
