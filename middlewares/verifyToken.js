@@ -8,6 +8,9 @@ function verifyToken(req,res,next){
         const token = req.headers.authorization
         //req.headers['x-master_dental-access-token']
     
+        // FALTA VERIFICAR SI EL TOKEN EXISTE EN LA BBDD O:
+
+
         if(!token){
             reject({
                 status: 401,
