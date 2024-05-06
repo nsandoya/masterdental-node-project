@@ -28,10 +28,10 @@ function createUser(req, res){
     // Destructuring de los campos incluidos en req.body (dichos datos se guardan en las constantes aquí creadas, respectivamente)
     const {nombre, edad, email, pssword} = req.body;
     // Se recomienda hacerlo de esta forma solo si los campos y las constantes son homónimos
-    User.create({
+    User.create({ // En este caso, se implementó un middleware en el modelo donde se hace uso del bcrypt service para encriptar el pssword del nuevo usuario antes de que se guarde como nuevo registro en la bbdd
         nombre, edad, email, pssword
-    }).
-    then((newUser) => res.status(200).json(newUser))
+    })
+    .then((newUser) => res.status(200).json(newUser))
     .catch(err => {
         console.error(err);
         res.status(500).send({status: 500, message:"Error al tratar de crear el nuevo registro"})
