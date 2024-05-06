@@ -75,8 +75,14 @@ function logout(req, res){
 
     AuthToken.findOneAndDelete({email, token})
     .then(( destroyedSession) => {
+        if(!destroyedSession){
+            res.status(401).send({
+                status: 401,
+                message: "¿Eres tú? Algo salió mal. Prueba con un nuevo inicio de sesión más tarde"
+            })
+        }
         res.status(200).send({
-            message: "Has cerrado sesión",
+            message: `Hasta luego, ${destroyedSession.user}`,
             logoutData: destroyedSession
         })
     })
