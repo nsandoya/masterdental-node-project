@@ -17,7 +17,7 @@ function hashPassword(originalPassword){
 }
 
 function comparePassword(originalPassword, hashedPassword){
-    return new Promise((resolve, rejecr) => {
+    return new Promise((resolve, reject) => {
         bcrypt.compare(originalPassword, hashedPassword, (error, match) => {
             if(error){
                 reject(new Error("Error al comparar contraseña"))

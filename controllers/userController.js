@@ -26,10 +26,10 @@ function getUserByID(req, res){
 // POST (crear nuevos registros)
 function createUser(req, res){
     // Destructuring de los campos incluidos en req.body (dichos datos se guardan en las constantes aquí creadas, respectivamente)
-    const {nombre, edad, email, pssword} = req.body;
+    const {nombre, edad, email, password} = req.body;
     // Se recomienda hacerlo de esta forma solo si los campos y las constantes son homónimos
-    User.create({ // En este caso, se implementó un middleware en el modelo donde se hace uso del bcrypt service para encriptar el pssword del nuevo usuario antes de que se guarde como nuevo registro en la bbdd
-        nombre, edad, email, pssword
+    User.create({ // En este caso, se implementó un middleware en el modelo donde se hace uso del bcrypt service para encriptar el password del nuevo usuario antes de que se guarde como nuevo registro en la bbdd
+        nombre, edad, email, password
     })
     .then((newUser) => res.status(200).json(newUser))
     .catch(err => {
@@ -47,14 +47,14 @@ let updateUser = async(req, res) => {
     const userId = req.params.id;
     var newUserInfo = req.body;
                     // ID de registro | Datos para el update | Este parámetro indica que esta operación debe retornar el registro actualizado
-    // Si queremos actualizar el pssword, se ejecuta el hasheado de la nueva contraseña antes de actualizar ese campo. 
+    // Si queremos actualizar el password, se ejecuta el hasheado de la nueva contraseña antes de actualizar ese campo. 
     // Se planteó todo el update como asíncrono porque esta operación requiere un tiempo para ejecutarse (y porque findByIdAndUpdate bypassea los middleware). Si no lo hacemos así, se guardará primero la nueva contraseña (tal cual la ingresó el cliente), y luego obtendremos el hash (muy tarde)
-    if(newUserInfo.pssword){
-        newUserInfo = await bcryptService.hashPassword(newUserInfo.pssword)
+    if(newUserInfo.password){
+        newUserInfo = await bcryptService.hashPassword(newUserInfo.password)
         .then(hashedPassword => {
             //console.log(hashedPassword)
-            newUserInfo.pssword = hashedPassword;
-            //console.log("funciona?", newUserInfo.pssword);
+            newUserInfo.password = hashedPassword;
+            //console.log("funciona?", newUserInfo.password);
             return(newUserInfo)
         })
         .catch( (error) => {

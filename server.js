@@ -25,12 +25,7 @@ app.use((err, req, res, next) => {
             status: 400,
             message: err.message,
         })
-    }/* else if(!req.route) {
-        return res.status(404).send({
-            status: 404,
-            message: 'La ruta solicitada no existe',
-        })
-    } */
+    }
     next()
 })
 

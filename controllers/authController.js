@@ -5,7 +5,7 @@ const User = require('../models/user');
 
 // Autenticación de usuarios, inicio de sesión
 function login(req, res){
-    const {email, pssword} = req.body;
+    const {email, password} = req.body;
     User.findOne({email})
     .then(user => {
         if(!user){
@@ -15,17 +15,8 @@ function login(req, res){
             })
         }
 
-        // Comparar pssword del request con el de la bbdd, con la diferencia de que este último estará encriptado. Para hacer la comparación, necesitaremos a bcrypt
-
-        /* const match = (pssword === user.pssword)
-        if(!match){
-            res.status(401).send({
-                status: 401,
-                message: "Inicio de sesión fallido"
-            })
-        } */
-        
-        bcryptService.comparePassword(pssword, user.pssword)
+        // Comparar password del request con el de la bbdd, con la diferencia de que este último estará encriptado. Para hacer la comparación, necesitaremos a bcrypt        
+        bcryptService.comparePassword(password, user.password)
         .then((match) => {
             if(!match){
                 res.status(401).send({
@@ -35,12 +26,12 @@ function login(req, res){
             }
             // Si las credenciales son correctas, se genera el token de usuario
             const token = authService.generateToken(user);
-            res.json({token})
+            res.json({message: `Bienvenido/a, ${user.nombre}. Tu sesión expira en 10min` ,token})
 
             // Una vez generado el user token, se guarda en la bbdd
             AuthToken.create({userId: user._id, token, user: user.nombre, email:user.email})
             .then(() => {
-                console.log("User token guardado", user.nombre)
+                console.log("Bienvenido/a", user.nombre)
                 //res.send({token})
             })
             .catch((error) => {
