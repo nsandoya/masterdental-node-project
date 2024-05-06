@@ -2,7 +2,7 @@
 
 require('dotenv').config()
 const jwt = require('jsonwebtoken')
-const authToken = require('../models/authToken')
+const AuthToken = require('../models/authToken')
 
 function verifyToken(req,res,next){
     return new Promise((resolve, reject) => {
@@ -15,8 +15,8 @@ function verifyToken(req,res,next){
                 })
             }
     
-        // FALTA VERIFICAR SI EL TOKEN EXISTE EN LA BBDD O:
-        authToken.findOne({token:token})
+        // VERIFICAR SI EL TOKEN EXISTE EN LA BBDD O:
+        AuthToken.findOne({token:token})
         .then((session) => {
             const KEY = process.env.KEY;
         //console.log("private key",KEY)
@@ -29,6 +29,7 @@ function verifyToken(req,res,next){
                     })
                 }else{
                     req.userId = decodedToken.userId; // Esta insersión en el request nos ayudará a conocer (en sessionController) quién ha iniciado sesión
+                    req.email = decodedToken.email; 
                     resolve(res)/* (
                         res.status(200).send({
                             status: 200,

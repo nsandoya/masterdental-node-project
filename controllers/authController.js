@@ -38,7 +38,7 @@ function login(req, res){
             res.json({token})
 
             // Una vez generado el user token, se guarda en la bbdd
-            AuthToken.create({userId: user._id, token, user: user.nombre})
+            AuthToken.create({userId: user._id, token, user: user.nombre, email:user.email})
             .then(() => {
                 console.log("User token guardado", user.nombre)
                 //res.send({token})
@@ -69,16 +69,20 @@ function logout(req, res){
     // 2. Eliminar token
 
     const token = req.headers.authorization
-    AuthToken.findOneAndDelete({token})
-    .then(( destroyedToken) => {
+    const email = req.email;
+    /* const email = req.email
+    console.log("email", email) */
+
+    AuthToken.findOneAndDelete({email, token})
+    .then(( destroyedSession) => {
         res.status(200).send({
             message: "Has cerrado sesión",
-            logoutData: destroyedToken
+            logoutData: destroyedSession
         })
     })
     .catch((error)=>{
         res.status(500).send({
-            message: "Cierre incorrecto"
+            message: "Algo salió mal. Vuelve a iniciar sesión"
         })
     })
     

@@ -11,6 +11,10 @@ const authTokenSchema = new mongoose.Schema({
     user: {
         type: String
     },
+    email:{
+        type: String,
+        required: true
+    },
     token: {
         type: String,
         required: true

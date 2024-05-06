@@ -5,6 +5,8 @@ function generateToken(user){
         userId: user._id,
         email: user.email
     };
+    //console.log("payload",payload)
+
     const token = jwt.sign(payload, process.env.KEY, {expiresIn: "3m"});
     return token
 }
