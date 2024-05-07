@@ -22,7 +22,12 @@ const authTokenSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now,
-        expires: "10m" // El documento expira dentro de 10min
+        //default: () => new Date(),
+        //expires: "10m" // El documento expira dentro de 10min, en teoría...
+    },
+    expirationDate:{
+        type: Date,
+        required: true,
     }
 });
 

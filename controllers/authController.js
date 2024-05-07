@@ -26,10 +26,12 @@ function login(req, res){
             }
             // Si las credenciales son correctas, se genera el token de usuario
             const token = authService.generateToken(user);
+            const expirationDate = new Date(Date.now() + 10 * 60000);
+
             res.json({message: `Bienvenido/a, ${user.nombre}. Tu sesión expira en 10min` ,token})
 
             // Una vez generado el user token, se guarda en la bbdd
-            AuthToken.create({userId: user._id, token, user: user.nombre, email:user.email})
+            AuthToken.create({userId: user._id, token, user: user.nombre, email:user.email, expirationDate: expirationDate})
             .then(() => {
                 console.log("Bienvenido/a", user.nombre)
                 //res.send({token})
