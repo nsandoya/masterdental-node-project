@@ -1,3 +1,8 @@
+const Arena = require('bull-arena')
+const Bull = require('bull')
+// Ya que se exportan varios archivos desde 'queues.js', debemos hacer destructuring al importar (así evitamos usar incorrectamente su contenido)
+const {mailMarketingQueue, queues} = require('./workers/queues')
+
 const express = require('express');
 const connectDB  = require('./ddbb/ddbb');
 const userRoutes = require("./routes/userRoutes");
@@ -12,6 +17,13 @@ const PORT = 3000;
 // Middleware
 // Parsea los datos del body a JSON
 app.use(express.json())
+
+// bull-arena
+const arenaConfig = Arena(
+    {Bull, queues}, 
+    {basePath: '/arena', disableListen: true}
+);
+app.use('', arenaConfig);
 
 // Rutas:   base     + endpoints
 app.use('/api/users', verifyToken,userRoutes) // No olvidar exportar las rutas desde userRoutes, authRoutes y sessionRoutes :v
@@ -37,3 +49,5 @@ app.listen(PORT, ()=>{
     console.log(`App listening in port ${PORT}`)
 })
 //server.timeout = 120000; // Tiempo de espera recomendado
+
+module.exports = {arenaConfig, queues}
