@@ -4,29 +4,35 @@ const User = require('../models/user');
 const {mailMarketingQueue, queues} = require('../workers/mailMarketingJob')
 // controller
 function sendMailMarketing(req, res){
-    if(!errors.isEmpty()){
+    /* if(!errors.isEmpty()){
         return res.status(400).send({
             status: 400,
             message: errors.array()
         })
-    }
+    } */
     res.status(200).send({
         status: 200,
         message: "El job fue recibido"
     })
     // validación
-    /* const errors = validationResult(req)
+    //const errors = validationResult(req)
+    
+    // Crear un trabajo para cada correo
 	req.users.forEach(user => {
-        const email = user.email;
-      
-        // Crear un trabajo para cada correo
+        console.log("Mail Marketing Controller", user)
+        
+        /* const email = user.email;
         const job = mailMarketingQueue.add({
           email: email
         });
       
-        job.then(() => console.log(`Job created for email ${email}`))
-           .catch(err => console.error(err));
-      }); */
+        job.then(() => console.log(`Job creado para ${email}`))
+           .catch(err => console.error(err)); */
+      });
+      return res.status(200).send({
+        status: 200,
+        message: "el job fue recibido"
+    })
     // Extraer la info del caché (? jaja)
     /* let data = req.users
     mailMarketingQueue.add(data) */
@@ -53,7 +59,7 @@ function mailMarketingController(req, res){
 		message: "el job fue recibido"
     })
 }
-module.exports = mailMarketingController // controller
+module.exports = sendMailMarketing // controller
 
 
 

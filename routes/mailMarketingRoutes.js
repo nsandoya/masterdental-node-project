@@ -7,9 +7,9 @@ const router = express.Router();
 const {redisCache, getUsersFromCache} = require('../middlewares/redisCache')
 
 // Importar constroladores
-const sendMailMarketing = require('../controllers/mailMarketingController')
+const sendMailToClient = require('../controllers/mailMarketingController')
 
 // Rutas :D
-router.get('/send', getUsersFromCache, sendMailMarketing);
+router.get('/send', getUsersFromCache, sendMailToClient);
 
 module.exports = router 

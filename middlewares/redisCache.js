@@ -20,57 +20,30 @@ redisCache.on("error", err=>console.log("error en el cliente redis", err))
 
 async function getUsersFromCache(req, res, next){
 	console.log("Pasa por getUsersFromCache")
-	let users = []
 	await new Promise((resolve, reject) => {
 		redisCache.get((error, entries) => {
-			//try{
-				let redisEntries
-				entries.forEach((entrie)=>{ // c/entry es un conjunto de todos los registros que se guardaron al hacer uso, en su momento, al cachearlos desde users (acá solo hay 1 entrie)
-					//console.log.bind(console)
-					redisEntries = JSON.parse(entrie.body)
-				});
-				console.log("por enviar users")
-				return resolve(req.users = redisEntries)
-				//return req.users = redisEntries
-				/* for(let entrie of redisEntries){ //Acá si puedo iterar en los registros del entrie
-					console.log("entrie,", entrie)
-				} */
-			/*}  catch {
-				if ( error ) throw error;
+			if (error) {
+				console.error(error);
+				return reject(error);
+			  }
+
+			let redisEntries
+			entries.forEach((entrie)=>{ // c/entry es un conjunto de todos los registros que se guardaron al hacer uso, en su momento, al cachearlos desde users (acá solo hay 1 entrie)
+				//console.log.bind(console)
+				redisEntries = JSON.parse(entrie.body)
+			});
+			console.log("por enviar users")
+			return resolve(req.users = redisEntries)
+			//return req.users = redisEntries
+			/* for(let entrie of redisEntries){ //Acá si puedo iterar en los registros del entrie
+				console.log("entrie,", entrie)
 			} */
+
 		});
 
 	});
 	next()
-	//redisCache.get('/api/users/')
-	/* , function (error, entries) {
-		 if (error) {
-		  console.error(error);
-		  return next(error);
-		}
-	
-		if (entries.length > 0) {
-			console.log(entries)
-			return req.users = JSON.parse(entries[0].body);
-		}
-		next(); 
-	  } */
-	  /* .then((data)=>{
-		if(data){
-			console.log("Habemus datos en cache");
-			return res.status(200).json({data: JSON.parse(data)})
-		}
-	  })
-	  .catch((error)=>{
-		console.log("No hay :(")
-		return res.status(400).json({status:400, error: error})
 
-	  }
-
-	  ); */
 }
 
-//router.get('/cache', cache.route() , cacheController)
-
-//module.exports = router
 module.exports = {redisCache, getUsersFromCache}
