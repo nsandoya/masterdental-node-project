@@ -3,6 +3,8 @@ const Bull = require('bull')
 // Ya que se exportan varios archivos desde 'queues.js', debemos hacer destructuring al importar (así evitamos usar incorrectamente su contenido)
 const {mailMarketingQueue, queues} = require('./workers/queues')
 
+const bodyParser = require('body-parser');
+
 const express = require('express');
 const connectDB  = require('./ddbb/ddbb');
 const userRoutes = require("./routes/userRoutes");
@@ -25,6 +27,9 @@ const arenaConfig = Arena(
     {basePath: '/arena', disableListen: true}
 );
 app.use('',arenaConfig);
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Rutas:   base     + endpoints
 app.use('/api/users', verifyToken,userRoutes) // No olvidar exportar las rutas desde userRoutes, authRoutes y sessionRoutes :v

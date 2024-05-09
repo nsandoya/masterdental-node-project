@@ -27,18 +27,18 @@ function getUserByID(req, res){
 
 // POST (crear nuevos registros)
 function createUser(req, res){
-    const errors = validationResult(req)
+    /* const errors = validationResult(req)
     if(!errors.isEmpty()){
         return res.status(400).send({
             status: 400,
             message: errors.array()
         })
-    }
+    } */
     // Destructuring de los campos incluidos en req.body (dichos datos se guardan en las constantes aquí creadas, respectivamente)
-    const {nombre, edad, email, password} = req.body;
+    const {nombre, edad, email, password, consultas} = req.body;
     // Se recomienda hacerlo de esta forma solo si los campos y las constantes son homónimos
     User.create({ // En este caso, se implementó un middleware en el modelo donde se hace uso del bcrypt service para encriptar el password del nuevo usuario antes de que se guarde como nuevo registro en la bbdd
-        nombre, edad, email, password
+        nombre, edad, email, password, consultas
     })
     .then((newUser) => res.status(200).json(newUser))
     .catch(err => {

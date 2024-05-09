@@ -19,6 +19,9 @@ const userSchema =  new mongoose.Schema({
         type: String,
         required: true,
     },
+    consultas: {
+        type: Array
+    }
 });
 
 // .pre es un preSaveMiddleware de Mongo
