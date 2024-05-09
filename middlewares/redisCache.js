@@ -20,10 +20,17 @@ redisCache.on("error", err=>console.log("error en el cliente redis", err))
 
 function getUsersFromCache(req, res, next){
 	console.log("Pasa por getUsersFromCache")
+	let users = []
 	redisCache.get(function (error, entries) {
 		if ( error ) throw error;
-	   
-		entries.forEach(console.log.bind(console));
+		let redisEntries
+		entries.forEach((entrie)=>{ // c/entry es un conjunto de todos los registros que se guardaron al hacer uso, en su momento, al cachearlos desde users
+			//console.log.bind(console)
+			redisEntries = JSON.parse(entrie.body)
+		});
+		for(let entrie of redisEntries){
+			console.log("entrie,", entrie)
+		}
 	  });
 	next()
 	//redisCache.get('/api/users/')
