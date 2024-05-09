@@ -18,7 +18,7 @@ let redisConfig = {
 } */
 
 // Este es un constructor. Crea una nueva Queue en Redis, con estos argumentos
-                            // queue instance name     |   opciones
+                            // queue instance name (madre)|   opciones
 const mailMarketingQueue = new Queue('mailMarketingQueue', {redis: redisConfig});
 // Nuestra nueva Queue va a ejecutar este proceso:
 mailMarketingQueue.process(2, (job, done) => sendMailToClient(job, done)) // Concurrencia (el 1) (cuántos jobs se procesan por c/vez?)
@@ -26,7 +26,7 @@ mailMarketingQueue.process(2, (job, done) => sendMailToClient(job, done)) // Con
 
 const queues = [
 	{
-        name: 'mailMarketingQueue', // Nombre de la instancia madre!
+        name: 'mailMarketingQueue', // Nombre de la queue madre!
 	    hostId: 'Mail marketing redis server',
 	    redis: redisConfig
     },
