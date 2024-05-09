@@ -104,7 +104,7 @@ let updateUser = async(req, res) => {
 function deleteUser(req, res){
     const userID = req.params.id;
     User.findByIdAndDelete(userID)
-    .then(user => res.status(204).send(`El usuario ${userID} fue eliminado`))
+    .then(user => res.status(204).send(`El usuario ${userID} fue eliminado. ${user}`))
     .catch(err => {
         console.error(err);
         res.status(500).send({status: 500, message:"Error al tratar de eliminar el registro"})
