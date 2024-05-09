@@ -11,11 +11,6 @@ let redisConfig = {
     
 }
 
-/* let redis = {
-    host: 'redis-17047.c240.us-east-1-3.ec2.redns.redis-cloud.com',
-	port: 17047,
-    password: 'NXrPNSGTmsib9Ro81tnMQJzpqvOoNWX1',
-} */
 
 // Este es un constructor. Crea una nueva Queue en Redis, con estos argumentos
                             // queue instance name (madre)|   opciones

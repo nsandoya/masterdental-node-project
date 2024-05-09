@@ -21,18 +21,6 @@ const sendMailToClient = async (job, done) => {
 		job.progress(100)
         console.log(`✅ Email enviado a ${email}`);
         return done(null, {"message":"Job ejecutado correctamente"})
-        /* req.users.forEach(user => {
-            job.progress(10)
-            console.log("Job iniciado")
-            
-            const email = user.email;
-            console.log(`Job created for email ${email}`)
-            job.progress(50)
-
-		    job.progress(100)
-		    return done(null, {"data": job.data,"message":"Job ejecutado correctamente"})
-          
-          }); */
 
     } catch(error){
         console.error(error);

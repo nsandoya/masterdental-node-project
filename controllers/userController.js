@@ -2,7 +2,6 @@
 const User = require('../models/user');
 const bcryptService = require('../services/bcryptService')
 
-//const {mailMarketingQueu} = require('../workers/mailMarketingJob')
 
 // GET (todos los registros)
 function getAllUsers(req, res){

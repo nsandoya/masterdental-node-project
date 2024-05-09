@@ -15,8 +15,6 @@ const redisCache = expressRedisCache({
     expire: 600000 //milisegundos //tiempo que permanece guardada la info
 })
 
-
-//const redisClient = redis.createClient({url: "redis//localhost:6379"})
 redisCache.on("connected", ()=>console.log("conectado a redis server"))
 redisCache.on("error", err=>console.log("error en el cliente redis", err))
 
@@ -38,9 +36,6 @@ async function getUsersFromCache(req, res, next){
 				console.log("por enviar users")
 				return resolve(req.users = redisEntries)
 				//return req.users = redisEntries
-				/* for(let entrie of redisEntries){ //Acá si puedo iterar en los registros del entrie
-					console.log("entrie,", entrie)
-				} */
 
 			}else{
 				/* return res.status(404).send({status: 404, message:"Tu registro en caché está vacío. Por favor, entra a /api/mail-marketing-users primero para solucionarlo :)"}) */
@@ -55,27 +50,9 @@ async function getUsersFromCache(req, res, next){
 					})
 					.catch(err => {
 						console.error(err);
-						return res.status(404).send({status: 404, message:"Tu registro está vacío"})
+						return res.status(404).send({status: 404, message:"Tu registro está vacío. Por favor, entra a /api/mail-marketing-users primero para solucionarlo :)"})
 					})
 			}
-			/* if(!entries){
-				async()=>{
-					console.log("entró a mongo")
-					await User.find()
-					.then(users => {
-						// Guarda los usuarios en Redis
-						redisCache.add('users', 6000, JSON.stringify(users), function (error, added) {
-							if (error) throw error;
-							console.log(added); // true
-						});
-						return resolve(req.users = users)
-					})
-					.catch(err => {
-						console.error(err);
-						return res.status(404).send({status: 404, message:"Tu registro está vacío"})
-					})
-				}
-			} */
 		});
 	})
 	next()
