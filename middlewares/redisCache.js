@@ -2,6 +2,7 @@
 // Importar Express y crear router
 const express = require('express');
 // Importar Redis
+const redis = require('redis')
 const expressRedisCache = require('express-redis-cache');
 
 
@@ -12,21 +13,45 @@ const redisCache = expressRedisCache({
     expire: 120000 //milisegundos //tiempo que permanece guardada la info
 })
 
+
+//const redisClient = redis.createClient({url: "redis//localhost:6379"})
+redisCache.on("error", ()=>console.log("conectado a redis server"))
+redisCache.on("error", err=>console.log("error en el cliente redis", err))
+
 function getUsersFromCache(req, res, next){
-	redisCache.get('/', function (error, entries) {
-		if (error) {
+	console.log("Pasa por getUsersFromCache")
+	redisCache.get(function (error, entries) {
+		if ( error ) throw error;
+	   
+		entries.forEach(console.log.bind(console));
+	  });
+	next()
+	//redisCache.get('/api/users/')
+	/* , function (error, entries) {
+		 if (error) {
 		  console.error(error);
 		  return next(error);
 		}
 	
 		if (entries.length > 0) {
 			console.log(entries)
-		  	
 			return req.users = JSON.parse(entries[0].body);
 		}
-	
-		next();
-	  });
+		next(); 
+	  } */
+	  /* .then((data)=>{
+		if(data){
+			console.log("Habemus datos en cache");
+			return res.status(200).json({data: JSON.parse(data)})
+		}
+	  })
+	  .catch((error)=>{
+		console.log("No hay :(")
+		return res.status(400).json({status:400, error: error})
+
+	  }
+
+	  ); */
 }
 
 //router.get('/cache', cache.route() , cacheController)

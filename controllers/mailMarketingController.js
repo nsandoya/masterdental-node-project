@@ -46,7 +46,8 @@ function sendMailMarketing(req, res){
 
 function mailMarketingController(req, res){
 	// extraer desde el req la info a encolar
-	//mailMarketingConfig.add() // e insertarla aquí
+    console.log(req.users, "req users")
+	//mailMarketingQueue.add(req.users) // e insertarla aquí
 	return res.status(200).send({
 		status: 200,
 		message: "el job fue recibido"

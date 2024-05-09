@@ -10,6 +10,6 @@ const {redisCache, getUsersFromCache} = require('../middlewares/redisCache')
 const sendMailMarketing = require('../controllers/mailMarketingController')
 
 // Rutas :D
-router.get('/send',/*  getUsersFromCache,  */sendMailMarketing);
+router.get('/send', getUsersFromCache, sendMailMarketing);
 
 module.exports = router 
