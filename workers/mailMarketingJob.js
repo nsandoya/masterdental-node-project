@@ -4,17 +4,22 @@
 // Una vez termines un job, ejecuta el signt
 const sendMailToClient = async (job, done) => {
     try{
+        //console.log("llegó al job")
         job.progress(10)
         const { email } = job.data;
-        console.log(`Enviando mail a ${email}`);
+        console.log(`🕒 Enviando mail a ${email}`);
 
         // Simular el envío de un correo
 		job.progress(50)
-        console.log(`Mail en camino a ${email}`);
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        console.log(`🟡 Mail en camino a ${email}`);
+        await new Promise((resolve, reject) => {
+            setTimeout(
+                resolve(console.log("📬"))
+                , 10000)
+        });
 
 		job.progress(100)
-        console.log(`Email enviado a ${email}`);
+        console.log(`✅ Email enviado a ${email}`);
         return done(null, {"message":"Job ejecutado correctamente"})
         /* req.users.forEach(user => {
             job.progress(10)
@@ -30,7 +35,8 @@ const sendMailToClient = async (job, done) => {
           }); */
 
     } catch(error){
-        return done(error) // en caso de error, podremos comunicar los estados de ejecución de los jobs
+        console.error(error);
+        done(error) // en caso de error, podremos comunicar los estados de ejecución de los jobs
     }
 } 
 
@@ -67,4 +73,3 @@ const pruebaJob = async (job, done) => {
 }
 
 module.exports = sendMailToClient
-
