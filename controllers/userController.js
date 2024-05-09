@@ -2,6 +2,8 @@
 const User = require('../models/user');
 const bcryptService = require('../services/bcryptService')
 
+//const {mailMarketingQueu} = require('../workers/mailMarketingJob')
+
 // GET (todos los registros)
 function getAllUsers(req, res){
     User.find()
@@ -25,6 +27,13 @@ function getUserByID(req, res){
 
 // POST (crear nuevos registros)
 function createUser(req, res){
+    const errors = validationResult(req)
+    if(!errors.isEmpty()){
+        return res.status(400).send({
+            status: 400,
+            message: errors.array()
+        })
+    }
     // Destructuring de los campos incluidos en req.body (dichos datos se guardan en las constantes aquí creadas, respectivamente)
     const {nombre, edad, email, password} = req.body;
     // Se recomienda hacerlo de esta forma solo si los campos y las constantes son homónimos
@@ -46,6 +55,8 @@ let updateUser = async(req, res) => {
     // Obtener de los parámetros de ruta (del request) el id de usuario, y usarlo para realizar la operación
     const userId = req.params.id;
     var newUserInfo = req.body;
+    
+    
                     // ID de registro | Datos para el update | Este parámetro indica que esta operación debe retornar el registro actualizado
     // Si queremos actualizar el password, se ejecuta el hasheado de la nueva contraseña antes de actualizar ese campo. 
     // Se planteó todo el update como asíncrono porque esta operación requiere un tiempo para ejecutarse (y porque findByIdAndUpdate bypassea los middleware). Si no lo hacemos así, se guardará primero la nueva contraseña (tal cual la ingresó el cliente), y luego obtendremos el hash (muy tarde)
@@ -66,6 +77,13 @@ let updateUser = async(req, res) => {
 
     User.findByIdAndUpdate(userId, newUserInfo, {new:true})
     .then((user) => {
+        /* const errors = validationResult(req)
+        if(!errors.isEmpty()){
+            return res.status(400).send({
+                status: 400,
+                message: errors.array()
+        })
+        } */
         //console.log("dentro del update: psswrd", newUserInfo2, "userid", userId)
         res.status(200).json(user)
     })
@@ -92,6 +110,7 @@ function deleteUser(req, res){
         res.status(500).send({status: 500, message:"Error al tratar de eliminar el registro"})
     })
 }
+
 
 module.exports = {
     getAllUsers,
