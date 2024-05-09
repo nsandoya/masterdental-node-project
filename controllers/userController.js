@@ -46,7 +46,7 @@ function createUser(req, res){
         res.status(500).send({status: 500, message:"Error al tratar de crear el nuevo registro"})
     })
 
-    console.log(req.body)
+    //console.log(req.body)
 
 }
 
@@ -77,13 +77,6 @@ let updateUser = async(req, res) => {
 
     User.findByIdAndUpdate(userId, newUserInfo, {new:true})
     .then((user) => {
-        /* const errors = validationResult(req)
-        if(!errors.isEmpty()){
-            return res.status(400).send({
-                status: 400,
-                message: errors.array()
-        })
-        } */
         //console.log("dentro del update: psswrd", newUserInfo2, "userid", userId)
         res.status(200).json(user)
     })
@@ -91,13 +84,14 @@ let updateUser = async(req, res) => {
         console.error(err);
         res.status(500).send({status: 500, message:"Error al tratar de actualizar el registro"})
     }) 
+
+    // Versión antigua
     /* User.findByIdAndUpdate(userId,newUserInfo, {new: true} ) 
     .then((user) => res.status(200).json(user))
     .catch(err => {
         console.error(err);
         res.status(500).send({status: 500, message:"Error al tratar de actualizar el registro"})
-    }) */
-    
+    }) */  
 }   
 
 // DELETE (eliminar registro)

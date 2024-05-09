@@ -19,7 +19,7 @@ redisCache.on("connected", ()=>console.log("conectado a redis server"))
 redisCache.on("error", err=>console.log("error en el cliente redis", err))
 
 async function getUsersFromCache(req, res, next){
-	console.log("Pasa por getUsersFromCache")
+	console.log("Pasando por getUsersFromCache")
 	await new Promise((resolve, reject) => {
 		redisCache.get((error, entries) => {
 			if (error) {
