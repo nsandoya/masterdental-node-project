@@ -2,8 +2,34 @@
 
 // La conclusión de cada uno de sus procesos más pequeños está siendo tratada de forma asíncrona, y será ejecutada como tal por Bull en una queue.
 // Una vez termines un job, ejecuta el signt
+const sendMailToClient = async (job, done) => {
+    try{
+        const { email } = job.data;
+        console.log(`Sending email to ${email}`);
 
-module.exports = async (job, done) => {
+        // Simular el envío de un correo
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
+        console.log(`Email sent to ${email}`);
+        /* req.users.forEach(user => {
+            job.progress(10)
+            console.log("Job iniciado")
+            
+            const email = user.email;
+            console.log(`Job created for email ${email}`)
+            job.progress(50)
+
+		    job.progress(100)
+		    return done(null, {"data": job.data,"message":"Job ejecutado correctamente"})
+          
+          }); */
+
+    } catch(error){
+        return done(error) // en caso de error, podremos comunicar los estados de ejecución de los jobs
+    }
+} 
+
+const pruebaJob = async (job, done) => {
     try{
         // Nosotros podemos ir indicando el avance del proceso
 		// Procurar generar un proceso para borrar de redis los jobs que ya fueron completados (pero antes, generar logs de estos procesos y guardarlos en otro lado)
@@ -11,6 +37,7 @@ module.exports = async (job, done) => {
         job.progress(10)
         console.log("Job iniciado")
         // 2
+        
         /* User.find()
         .then(
             //users => res.status(200).json(users)
@@ -33,4 +60,6 @@ module.exports = async (job, done) => {
         return done(error) // en caso de error, podremos comunicar los estados de ejecución de los jobs
     }
 }
+
+module.exports = sendMailToClient
 

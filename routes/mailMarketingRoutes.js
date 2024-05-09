@@ -4,12 +4,12 @@ const express = require('express');
 const router = express.Router();
 
 //Redis
-const redisCache = require('../middlewares/redisCache')
+const {redisCache, getUsersFromCache} = require('../middlewares/redisCache')
 
 // Importar constroladores
-const mailMarketingController = require('../controllers/mailMarketingController')
+const sendMailMarketing = require('../controllers/mailMarketingController')
 
 // Rutas :D
-router.get('/send'/* , redisCache.route() */,mailMarketingController);
+router.get('/send',/*  getUsersFromCache,  */sendMailMarketing);
 
 module.exports = router 
