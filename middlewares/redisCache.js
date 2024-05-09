@@ -3,6 +3,8 @@
 const express = require('express');
 // Importar Redis
 const redis = require('redis')
+const mongoose = require('mongoose');
+const User = require('../models/user');
 const expressRedisCache = require('express-redis-cache');
 
 
@@ -25,23 +27,57 @@ async function getUsersFromCache(req, res, next){
 			if (error) {
 				console.error(error);
 				return reject(error);
-			  }
+			}
 
-			let redisEntries
-			entries.forEach((entrie)=>{ // c/entry es un conjunto de todos los registros que se guardaron al hacer uso, en su momento, al cachearlos desde users (acá solo hay 1 entrie)
-				//console.log.bind(console)
-				redisEntries = JSON.parse(entrie.body)
-			});
-			console.log("por enviar users")
-			return resolve(req.users = redisEntries)
-			//return req.users = redisEntries
-			/* for(let entrie of redisEntries){ //Acá si puedo iterar en los registros del entrie
-				console.log("entrie,", entrie)
+			if(entries && entries.length > 0){
+				let redisEntries
+				entries.forEach((entrie)=>{ // c/entry es un conjunto de todos los registros que se guardaron al hacer uso, en su momento, al cachearlos desde users (acá solo hay 1 entrie)
+					//console.log.bind(console)
+					redisEntries = JSON.parse(entrie.body)
+				});
+				console.log("por enviar users")
+				return resolve(req.users = redisEntries)
+				//return req.users = redisEntries
+				/* for(let entrie of redisEntries){ //Acá si puedo iterar en los registros del entrie
+					console.log("entrie,", entrie)
+				} */
+
+			}else{
+				/* return res.status(404).send({status: 404, message:"Tu registro en caché está vacío. Por favor, entra a /api/mail-marketing-users primero para solucionarlo :)"}) */
+				User.find()
+					.then(users => {
+						// Guarda los usuarios en Redis
+						redisCache.add('users', 6000, JSON.stringify(users), function (error, added) {
+							if (error) throw error;
+							console.log(added); // true
+						});
+						return resolve(req.users = users)
+					})
+					.catch(err => {
+						console.error(err);
+						return res.status(404).send({status: 404, message:"Tu registro está vacío"})
+					})
+			}
+			/* if(!entries){
+				async()=>{
+					console.log("entró a mongo")
+					await User.find()
+					.then(users => {
+						// Guarda los usuarios en Redis
+						redisCache.add('users', 6000, JSON.stringify(users), function (error, added) {
+							if (error) throw error;
+							console.log(added); // true
+						});
+						return resolve(req.users = users)
+					})
+					.catch(err => {
+						console.error(err);
+						return res.status(404).send({status: 404, message:"Tu registro está vacío"})
+					})
+				}
 			} */
-
 		});
-
-	});
+	})
 	next()
 
 }
