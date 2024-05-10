@@ -27,17 +27,7 @@ async function getUsersFromCache(req, res, next){
 				return reject(error);
 			}
 
-			if(entries && entries.length > 0){
-				let redisEntries
-				entries.forEach((entrie)=>{ // c/entry es un conjunto de todos los registros que se guardaron al hacer uso, en su momento, al cachearlos desde users (acá solo hay 1 entrie)
-					//console.log.bind(console)
-					redisEntries = JSON.parse(entrie.body)
-				});
-				console.log("por enviar users")
-				return resolve(req.users = redisEntries)
-				//return req.users = redisEntries
-
-			}else{
+			if(!req.users){
 				/* return res.status(404).send({status: 404, message:"Tu registro en caché está vacío. Por favor, entra a /api/mail-marketing-users primero para solucionarlo :)"}) */
 				User.find()
 					.then(users => {
@@ -52,7 +42,17 @@ async function getUsersFromCache(req, res, next){
 						console.error(err);
 						return res.status(404).send({status: 404, message:"Tu registro está vacío. Por favor, entra a /api/mail-marketing-users primero para solucionarlo :)"})
 					})
-			}
+				}else if(entries && entries.length > 0){
+					let redisEntries
+					entries.forEach((entrie)=>{ // c/entry es un conjunto de todos los registros que se guardaron al hacer uso, en su momento, al cachearlos desde users (acá solo hay 1 entrie)
+						//console.log.bind(console)
+						redisEntries = JSON.parse(entrie.body)
+					});
+					console.log("por enviar users")
+					return resolve(req.users = redisEntries)
+					//return req.users = redisEntries
+	
+				}
 		});
 	})
 	next()
