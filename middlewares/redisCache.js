@@ -18,7 +18,7 @@ const redisCache = expressRedisCache({
 redisCache.on("connected", ()=>console.log("conectado a redis server"))
 redisCache.on("error", err=>console.log("error en el cliente redis", err))
 
-async function getUsersFromCache(req, res, next){
+/* async function getUsersFromCache(req, res, next){
 	console.log("Pasando por getUsersFromCache")
 	await new Promise((resolve, reject) => {
 		redisCache.get((error, entries) => {
@@ -28,7 +28,7 @@ async function getUsersFromCache(req, res, next){
 			}
 
 			if(!req.users){
-				/* return res.status(404).send({status: 404, message:"Tu registro en caché está vacío. Por favor, entra a /api/mail-marketing-users primero para solucionarlo :)"}) */
+				//return res.status(404).send({status: 404, message:"Tu registro en caché está vacío. Por favor, entra a /api/mail-marketing-users primero para solucionarlo :)"})
 				User.find()
 					.then(users => {
 						// Guarda los usuarios en Redis
@@ -58,5 +58,46 @@ async function getUsersFromCache(req, res, next){
 	next()
 
 }
+ */
+async function getUsersFromCache(req, res, next) {
+	try {
+	  let entries = await new Promise((resolve, reject) => {
+		redisCache.get('users', (error, entries) => {
+		  if (error) {
+			console.error(error);
+			reject(error);
+		  } else {
+			resolve(entries);
+		  }
+		});
+	  });
+  
+	  if (entries.length === 0) {
+		var users = await User.find();
+		await new Promise((resolve, reject) => {
+		  redisCache.add('users', JSON.stringify(users), 6000, (error, added) => {
+			if (error) {
+			  console.error(error);
+			  reject(error);
+			} else {
+			  //console.log(added.body, "added");
+			  resolve(added);
+			}
+		  });
+		});
+		console.log("Datos guardados en cache");
+		req.users = users;
+	  } else {
+		console.log(entries.length, "Datos obtenidos de la cache");
+		req.users = JSON.parse(entries[0].body);
+	  }
+	  next();
+	} catch (err) {
+	  console.error(err);
+	  res.status(500).send({ status: 500, message: "Hubo un error al obtener los usuarios de la caché." });
+	}
+  }
 
+  
+  
 module.exports = {redisCache, getUsersFromCache}

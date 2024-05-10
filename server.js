@@ -35,7 +35,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/api/users', verifyToken,userRoutes) // No olvidar exportar las rutas desde userRoutes, authRoutes y sessionRoutes :v
 app.use('/api/auth', authRoutes)
 app.use('/api/session', verifyToken,sessionRoutes)
-app.use('/api/mail-marketing', verifyToken,mailMarketingRoutes)
+app.use('/api/mail-marketing', verifyToken, mailMarketingRoutes)
 
 // Errores de json (middleware global)
 app.use((err, req, res, next) => {

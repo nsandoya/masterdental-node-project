@@ -6,7 +6,7 @@ function connectDB(){
         mongoose.connect(process.env.MONGO_URL)
         .then(()=>{
             //console.log("Conectado a tipti-project(master_dental)");
-            console.log("Successful ddbb conexion");
+            console.log("Successful ddbb connection");
             res()
         })
         .catch((error) => {

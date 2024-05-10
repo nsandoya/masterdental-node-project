@@ -17,7 +17,7 @@ async function sendMailMarketing(req, res){
     }
     return res.status(200).send({
         status: 200,
-        message: "El job fue recibido"
+        message: "Todos tus pacientes han recibido tu mensaje ✨"
     })
 }
 
